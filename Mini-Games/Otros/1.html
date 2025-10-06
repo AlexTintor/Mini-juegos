@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P1</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+    <header>
+        <span>Pregunta #1</span>
+        <br>
+        <button>MOSTRAR</button>
+    </header>
+    <hr>
+    <button id="timer-30">30 Segundos</button>
+    <button id="timer-45">45 Segundos</button>
+    <button id="timer-60">1 Minuto</button>
+    <span id="countdown">--:--</span>
+    <p></p>
+    <br><br>
+    <section class="p1">
+        <span>¿Como se llama nicolas?</span>
+        <ul>
+            <li>
+                <article class="art-1">
+                    <button>a) Pancho</button>
+                </article>
+            </li>
+            <li>
+                <article class="art2">
+                    <button>b) Pedro</button>
+                </article>
+
+            </li>
+            <li>
+                <article class="art3">
+                    <button>c) Nicolas</button>
+                </article>
+            </li>
+            <li>
+                <article class="art4">
+                    <button>d) Emilio</button>
+                </article>
+                <span class="space"> </span>
+            </li>
+        </ul>
+    </section>
+    <p></p>
+
+    <footer>
+        <nav>
+            <ul>
+                <li><button><a href="../index.html">Index</a></button></li>
+                <li><button>1</button></li>
+                <li><button>2</button></li>
+                <li><button>3</button></li>
+                <li><button>4</button></li>
+                <li><button>5</button></li>
+            </ul>
+        </nav>
+    </footer>
+
+    <button id="reset-btn">Reset</button>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Referencias de Elementos ---
+            const toggleBoton = document.querySelector('header button');
+            const seccion = document.querySelector('section.p1');
+            const timer30Btn = document.getElementById('timer-30');
+            const timer45Btn = document.getElementById('timer-45');
+            const timer60Btn = document.getElementById('timer-60');
+            const countdownSpan = document.getElementById('countdown');
+            const resetButton = document.getElementById('reset-btn'); // Nuevo botón de Reset
+
+            let currentTimer = null;
+
+
+            // --- Funcionalidad del Botón Reset ---
+            function resetGame() {
+                // 1. Detiene cualquier temporizador activo
+                if (currentTimer) {
+                    clearInterval(currentTimer);
+                    currentTimer = null;
+                }
+
+                // 2. Restablece el fondo del cuerpo
+                document.body.style.backgroundColor = '';
+
+                // 3. Restablece el display de la sección y el texto del botón de toggle
+                seccion.style.display = 'none';
+                toggleBoton.textContent = 'MOSTRAR';
+
+                // 4. Restablece el display del temporizador
+                countdownSpan.textContent = '--:--';
+            }
+
+            // Asigna el evento al nuevo botón Reset
+            resetButton.addEventListener('click', resetGame);
+
+
+            // --- Lógica de Ocultar/Mostrar (Toggle) ---
+
+            seccion.style.display = 'none'; // Oculta por defecto
+
+            toggleBoton.addEventListener('click', function () {
+                if (seccion.style.display === 'none') {
+                    seccion.style.display = 'block';
+                    toggleBoton.textContent = 'OCULTAR';
+                } else {
+                    seccion.style.display = 'none';
+                    toggleBoton.textContent = 'MOSTRAR';
+                }
+            });
+
+
+            // --- Lógica del Temporizador Variable ---
+
+            function startTimer(duration) {
+                // Detiene y reinicia
+                if (currentTimer) {
+                    clearInterval(currentTimer);
+                }
+                document.body.style.backgroundColor = ''; // Limpia el fondo rojo al iniciar
+
+                let timeRemaining = duration;
+
+                function updateDisplay() {
+                    const minutes = Math.floor(timeRemaining / 60);
+                    const seconds = timeRemaining % 60;
+
+                    const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    countdownSpan.textContent = display;
+
+                    if (timeRemaining <= 0) {
+                        clearInterval(currentTimer);
+                        currentTimer = null; // Indica que no hay timer corriendo
+                        countdownSpan.textContent = "¡Tiempo terminado!";
+
+                        // Cambia el background del <body> a rojo 
+                        document.body.style.backgroundColor = 'red';
+
+                        return;
+                    }
+
+                    timeRemaining--;
+                }
+
+                updateDisplay();
+                currentTimer = setInterval(updateDisplay, 1000);
+            }
+
+            timer30Btn.addEventListener('click', function () {
+                startTimer(30);
+            });
+
+            timer45Btn.addEventListener('click', function () {
+                startTimer(45);
+            });
+
+            timer60Btn.addEventListener('click', function () {
+                startTimer(60);
+            });
+        });
+    </script>
+</body>
+
+</html>
